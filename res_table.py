@@ -3,7 +3,7 @@
 # reservation table disctionary class for 
 # checking if a path is taken by a previous agent
 # key: (x,y,t)
-# value: 0 (available) or 1 (reserved)
+# value:0 (available) or 1 (reserved)
 
 class reservation_table(dict):
   def __init__(self):
