@@ -67,7 +67,6 @@ class GridMap:
                 elif lines[r][c] == 'i':
                     self.init_pos = (r,c,0)
 
-# edit
     def is_goal(self,s):
         '''
         Test if a specifid state is the goal state
@@ -79,7 +78,6 @@ class GridMap:
         return (s[_X] == self.goal[_X] and
                 s[_Y] == self.goal[_Y])
 
-# edit
     def transition(self, s, a):
         '''
         Transition function for the current grid map.
@@ -94,20 +92,24 @@ class GridMap:
         new_pos = list(s[:])
         # Ensure action stays on the board
         if a == 'u':
+            # if not at top edge
             if s[_Y] > 0:
                 new_pos[_Y] -= 1
+                new_pos[_T] += 1
         elif a == 'd':
             if s[_Y] < self.rows - 1:
                 new_pos[_Y] += 1
+                new_pos[_T] += 1
         elif a == 'l':
             if s[_X] > 0:
                 new_pos[_X] -= 1
+                new_pos[_T] += 1
         elif a == 'r':
             if s[_X] < self.cols - 1:
                 new_pos[_X] += 1
+                new_pos[_T] += 1
         elif a == 'p':   # ADD Pause Action
-             if s[_X] < self.cols - 1:  # change to pause action
-                new_pos[_X] += 1
+            new_pos[_T] += 1
 
         else:
             print('Unknown action:', str(a))
@@ -182,7 +184,7 @@ class GridMap:
 class SearchNode:
     def __init__(self, s, A, parent=None, parent_action=None, cost=0):
         '''
-        s - the state defining the search node
+        s - the state defining the search node (x,y,t)
         A - list of actions
         parent - the parent search node
         parent_action - the action taken from parent to get to s
@@ -314,43 +316,6 @@ def CA_star_search(init_state, f, is_goal, actions, h):
                         frontier.push(n_prime, n_prime.cost)
     return None
 
-# leaving in A* for now to reference
-def a_star_search(init_state, f, is_goal, actions, h):
-    '''
-    init_state - value of the initial state
-    f - transition function takes input state (s), action (a), returns s_prime = f(s, a)
-        returns s if action is not valid
-    is_goal - takes state as input returns true if it is a goal state
-        actions - list of actions available
-    h - heuristic function, takes input s and returns estimated cost to goal
-        (note h will also need access to the map, so should be a member function of GridMap)
-    '''
-    frontier = PriorityQ() # priority queue
-    n0 = SearchNode(init_state, actions, cost = 0) 
-    visited = []
-    frontier.push(n0, n0.cost)
-    while len(frontier) > 0:  
-        # Expand lowest cost node
-        n_i = frontier.pop()
-        if n_i.state not in visited:
-            visited.append(n_i.state)
-            if is_goal(n_i.state):
-                path, action_path = backpath(n_i)
-                return (path, visited)
-            else:
-                for a in actions:
-                    s_prime = f(n_i.state, a)
-                    n_prime = SearchNode(s_prime, actions, n_i, a)
-                    # only add node and its cost if not in p-queue yet
-                    # f = g + h
-                    n_prime.cost = costpath(n_prime) + h(n_prime.state)
-
-                    if frontier.get_cost(n_prime) is None: # if n_prime isn't in the queue
-                        frontier.push(n_prime, n_prime.cost)
-                    elif n_prime.cost < frontier.get_cost(n_prime):
-                        frontier.push(n_prime, n_prime.cost)
-    return None
-
 def backpath(node):
     '''
     Function to determine the path that lead to the specified search node
@@ -371,14 +336,6 @@ def backpath(node):
         path.append(node.state)
     # put path in order of start to finish
     path.reverse()
-
-    # action path (not complete yet)
-    # # run until start node is hit
-    # while node.parent is not None:
-    #     # add parent node to the path
-    #     action_path.append(node.parent_action)
-    #     node = node.parent
-
     return (path, action_path)
 
 def costpath(node):
@@ -388,21 +345,7 @@ def costpath(node):
     cost = 0
     # run until start node is hit
     while node.parent is not None:
-        #node = node.parent
-        if node.parent_action in ['u','d','l','r']:
+        if node.parent_action in ['u','d','l','r','p']:
             cost = cost + 1
-        if node.parent_action in ['ne','nw','sw','se']:
-            cost = cost + 1.5
         
-        # non-holonomic 
-        #   diagonal
-        if node.parent_action == 'forward' and node.parent.state[_T] in [45,135,225,315]:
-            cost = cost + 1.5
-        # up down left right
-        if node.parent_action == 'forward' and node.parent.state[_T] in [0,90,180,270]:
-            cost = cost + 1
-        #   turning
-        if node.parent_action in ['0','45','90', '135','180','225','270','315']:
-            cost = cost + .25
-        node = node.parent
     return (cost)
