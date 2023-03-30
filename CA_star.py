@@ -347,5 +347,6 @@ def costpath(node):
     while node.parent is not None:
         if node.parent_action in ['u','d','l','r','p']:
             cost = cost + 1
+            node = node.parent
         
     return (cost)

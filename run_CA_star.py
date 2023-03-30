@@ -12,5 +12,5 @@ def run_CA_star(map_path,actions=CA_star._ACTIONS):
 
 # edit map
 if __name__ == '__main__':
-    run_CA_star('./map1.txt')
+    run_CA_star('./map0.txt')
 
