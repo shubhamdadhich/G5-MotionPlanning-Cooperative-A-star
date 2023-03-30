@@ -23,5 +23,5 @@ for state in path:
 # example: agent 2 is condisering its next state
 state70 = (3,4,1)
 
-# agent 2 checks if its next state is occupied by agent 1's path
+# agent 2 checks if its next state is occupied by agent 1's path and it is occupied
 print(res_table[str(state70)])
