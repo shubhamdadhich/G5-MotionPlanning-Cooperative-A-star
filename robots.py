@@ -1,1 +1,0 @@
-## Code to create various types of robots, e.g. (non) holonomic.
