@@ -3,5 +3,6 @@
 1. Finalise cost for each action.
 2. Class for robot and Server needs to be implemented where server will update the map for each robot class and invoke the robot.
 3. Define DOF and action classes so that DOF can be conveyed to Robot class and robot can use this DOF to call actions.
-4. run_ca_star.py script will call the server.py with arguments of map and actions defined by mapreader.py and actions.py
-5. 
+4. run_ca_star.py script will call the server.py with arguments of map and actions defined by map_reader.py and actions.py
+5. The server will keep the mapReader object track from map_reader.py and schedule path planning for each robot. This will require the required robots for the map to be conveyed by map itself.
+6. Finally the Robot class will call the ca_star.py class CAStar for the map.
