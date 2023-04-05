@@ -279,8 +279,9 @@ class PriorityQ:
         '''
         return str(self.l)
 
+
 # edit
-def CA_star_search(init_state, f, is_goal, actions, h):
+def CA_star_search(init_state, f, is_goal, actions, h, res_table):
     '''
     init_state - value of the initial state
     f - transition function takes input state (s), action (a), returns s_prime = f(s, a)
@@ -297,11 +298,16 @@ def CA_star_search(init_state, f, is_goal, actions, h):
     while len(frontier) > 0:  
         # Expand lowest cost node
         n_i = frontier.pop()
-        if n_i.state not in visited:
+        # check if state has not been visited (by current robot)
+        # or has been visited by previous robot
+        if n_i.state not in visited and n_i.state not in res_table:
             visited.append(n_i.state)
             if is_goal(n_i.state):
                 path, action_path = backpath(n_i)
-                return (path, visited)
+                # make robot 1 path 'reserved' in space-time 
+                for state in path:
+                    res_table.add(str(state), 'robot_id_here')
+                return (path, visited, res_table)
             else:
                 for a in actions:
                     s_prime = f(n_i.state, a)
