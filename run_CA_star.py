@@ -34,5 +34,6 @@ if __name__ == '__main__':
     print(len(res_table_2))
     print(res_table_2)
 
-    # now we need to make sure collision avoidance is working and display it better
-    # also make sure heuristic is good
+    # now need to make sure CA* collision avoidance is working (step through with debugger)
+    # and display it better
+    # and make sure heuristic is good

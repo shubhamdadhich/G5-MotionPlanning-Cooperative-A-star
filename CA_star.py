@@ -299,8 +299,7 @@ def CA_star_search(init_state, f, is_goal, actions, h, res_table):
         # Expand lowest cost node
         n_i = frontier.pop()
         # check if state has not been visited (by current robot)
-        # or has been visited by previous robot
-        if n_i.state not in visited and n_i.state not in res_table:
+        if n_i.state not in visited:
             visited.append(n_i.state)
             if is_goal(n_i.state):
                 path, action_path = backpath(n_i)
@@ -316,7 +315,8 @@ def CA_star_search(init_state, f, is_goal, actions, h, res_table):
                     # f = g + h
                     n_prime.cost = costpath(n_prime) + h(n_prime.state)
 
-                    if frontier.get_cost(n_prime) is None: # if n_prime isn't in the queue
+                    # if n_prime isn't in the queue and has not been visited by previous robot
+                    if frontier.get_cost(n_prime) is None and n_prime.state not in res_table:
                         frontier.push(n_prime, n_prime.cost)
                     elif n_prime.cost < frontier.get_cost(n_prime):
                         frontier.push(n_prime, n_prime.cost)
