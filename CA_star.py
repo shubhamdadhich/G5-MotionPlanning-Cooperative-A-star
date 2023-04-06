@@ -317,7 +317,12 @@ def CA_star_search(init_state, f, is_goal, actions, h, res_table, robot_id):
 
                     # if n_prime isn't in the queue and has not been visited by previous robot
                     if frontier.get_cost(n_prime) is None and n_prime.state not in res_table:
-                        frontier.push(n_prime, n_prime.cost)
+                        # check for robots jumping over each other in x direction in space-time
+                        diagonal_top = tuple(np.subtract(n_prime.state,(0,0,1)))
+                        diagonal_bottom = tuple(np.subtract(n_prime.state,(1,0,0)))
+                        if diagonal_top and diagonal_bottom not in res_table:
+                            # consider new state
+                            frontier.push(n_prime, n_prime.cost)
                     # NOTE may need to addthis back in later, took out because causing errors
                     #elif n_prime.cost < frontier.get_cost(n_prime):
                     #    frontier.push(n_prime, n_prime.cost)
