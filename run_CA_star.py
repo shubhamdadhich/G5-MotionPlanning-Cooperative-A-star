@@ -16,6 +16,7 @@ def run_CA_star(map_path, res_table, robot_id, actions=CA_star._ACTIONS):
     g.display_map(path,visited)
     return path, res_table
 
+# NOTE save sequence of path (list) to robot class
 
 # edit map
 if __name__ == '__main__':
@@ -24,6 +25,8 @@ if __name__ == '__main__':
 
     # get path for robot 1 from CA* and update reservation table with path
     r1_path, res_table_1 = run_CA_star('./map_col_r1.txt', res_table, robot_id = 1)
+
+    print(res_table.keys())
 
     print(len(res_table_1))
     print(res_table_1)
@@ -35,6 +38,6 @@ if __name__ == '__main__':
     print(len(res_table_2))
     print(res_table_2)
 
-    # now need to make sure CA* collision avoidance is working (step through with debugger)
+    # NOTE reservation table in CA* script is in progress
     # and display it better
     # and make sure heuristic is good

@@ -57,7 +57,7 @@ class GridMap:
             print('rows', self.rows)
             print('cols', self.cols)
             print(lines)
-        self.occupancy_grid = np.zeros((self.rows, self.cols), dtype=np.bool)
+        self.occupancy_grid = np.zeros((self.rows, self.cols), dtype=bool)
         for r in range(self.rows):
             for c in range(self.cols):
                 if lines[r][c] == 'x':
@@ -305,7 +305,7 @@ def CA_star_search(init_state, f, is_goal, actions, h, res_table, robot_id):
                 path, action_path = backpath(n_i)
                 # make robot 1 path 'reserved' in space-time 
                 for state in path:
-                    res_table.add(str(state), robot_id)
+                    res_table.add(tuple(state), robot_id)
                 return (path, visited, res_table)
             else:
                 for a in actions:
@@ -318,8 +318,9 @@ def CA_star_search(init_state, f, is_goal, actions, h, res_table, robot_id):
                     # if n_prime isn't in the queue and has not been visited by previous robot
                     if frontier.get_cost(n_prime) is None and n_prime.state not in res_table:
                         frontier.push(n_prime, n_prime.cost)
-                    elif n_prime.cost < frontier.get_cost(n_prime):
-                        frontier.push(n_prime, n_prime.cost)
+                    # NOTE may need to addthis back in later, took out because causing errors
+                    #elif n_prime.cost < frontier.get_cost(n_prime):
+                    #    frontier.push(n_prime, n_prime.cost)
     return None
 
 def backpath(node):

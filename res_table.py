@@ -18,10 +18,9 @@ path = [(2,3,0),(3,4,1),(4,5,2)]
 
 # add agent states to reservation table after path found
 for state in path:
-  res_table.add(str(state), 1)
+  res_table.add(state, 1)
 
 # example: agent 2 is condisering its next state
-state70 = (3,4,1)
-
-# agent 2 checks if its next state is occupied by agent 1's path and it is occupied
-print(res_table[str(state70)])
+print(res_table)
+if (3,4,1) in res_table:
+  print('in res table')
