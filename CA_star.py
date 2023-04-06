@@ -305,7 +305,7 @@ def CA_star_search(init_state, f, is_goal, actions, h, res_table, robot_id):
                 path, action_path = backpath(n_i)
                 # make robot 1 path 'reserved' in space-time 
                 for state in path:
-                    res_table.add(tuple(state), robot_id)
+                    res_table.add(tuple(state), robot_id)                    
                 return (path, visited, res_table)
             else:
                 for a in actions:
