@@ -2,6 +2,11 @@
 # to run CA*
 
 import CA_star
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
+from matplotlib.animation import PillowWriter
+import numpy as np
+from visualization_multiple import animate_paths
 
 class reservation_table(dict):
   def __init__(self):
@@ -26,20 +31,12 @@ if __name__ == '__main__':
     # get path for robot 1 from CA* and update reservation table with path
     r1_path, res_table_1 = run_CA_star('./map_col_r1.txt', res_table, robot_id = 1)
 
-    print("Robot 1")
-    # print(res_table_1)
-    print(r1_path)
-
     # run CA* with next robot 
     # get path for robot 2 from CA* and update reservation table with path
     r2_path, res_table_2 = run_CA_star('./map_col_r2.txt', res_table, robot_id = 2)
 
-    print(" ")
-    print("Robot 2")
-    # print(res_table_2)
-    print(r2_path)
+    animate_paths(r1_path, r2_path, "video1")
 
     # NOTE CA* appears to be working. 
     # Now need to combine with entire script
-    # also display it better
     # and make sure heuristic is good
