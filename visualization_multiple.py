@@ -3,8 +3,7 @@ from matplotlib.animation import FuncAnimation
 from matplotlib.animation import PillowWriter
 import numpy as np
 
-
-def animate_paths(path1,path2, file_name):
+def animate_paths(path1,path2, file_name, show_goals = False):
     # function that plots two paths over time and saves it as a gif
     # will extend to multiple paths later
 
@@ -42,9 +41,10 @@ def animate_paths(path1,path2, file_name):
         point1 = points1[i]
         point2 = points2[i]
 
-        # Plot goals
-        ax.plot(2,4,color = 'black', marker = 'o')
-        ax.plot(2,0,color = 'gray', marker = 'o')
+        if show_goals == True:
+            # Plot goals
+            ax.plot(2,4,color = 'black', marker = 'o')
+            ax.plot(2,0,color = 'gray', marker = 'o')
 
         # Plot that point using the x and y coordinates
         ax.plot(point1[0], point1[1], color='black', label='original', marker='o',markersize=40)
@@ -62,3 +62,5 @@ def animate_paths(path1,path2, file_name):
 
     # Save the animation as an animated GIF
     ani.save(file_name + ".gif", dpi=300, writer=PillowWriter(fps=.8))
+
+    print(f"Saved video: {file_name}.gif")
