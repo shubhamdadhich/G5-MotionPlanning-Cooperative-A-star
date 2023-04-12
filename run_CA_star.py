@@ -26,16 +26,18 @@ if __name__ == '__main__':
     # get path for robot 1 from CA* and update reservation table with path
     r1_path, res_table_1 = run_CA_star('./map_col_r1.txt', res_table, robot_id = 1)
 
-    print("Reservation table 1")
-    print(res_table_1)
+    print("Robot 1")
+    # print(res_table_1)
+    print(r1_path)
 
     # run CA* with next robot 
     # get path for robot 2 from CA* and update reservation table with path
     r2_path, res_table_2 = run_CA_star('./map_col_r2.txt', res_table, robot_id = 2)
 
     print(" ")
-    print("Reservation table 2")
-    print(res_table_2)
+    print("Robot 2")
+    # print(res_table_2)
+    print(r2_path)
 
     # NOTE CA* appears to be working. 
     # Now need to combine with entire script
