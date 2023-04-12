@@ -23,6 +23,13 @@ def run_CA_star(map_path, res_table, robot_id, actions=CA_star._ACTIONS):
 
 # edit map
 if __name__ == '__main__':
+    
+    # NOTE 
+    # pseudocode for how this can be generalized with a robot class:
+    # for robot in robots:
+    #    robot.path = run_CA_star(robot.map, res_table, robot.robot_id)
+    # animate_paths(all_robots, "video_1")
+
     # create reservation table
     res_table = reservation_table()
 
