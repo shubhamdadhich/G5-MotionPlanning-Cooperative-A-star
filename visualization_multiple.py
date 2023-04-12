@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from matplotlib.animation import PillowWriter
+import numpy as np
 
 # Robot 1
 # [(2, 0, 0), (2, 1, 1), (2, 2, 2), (2, 3, 3), (2, 4, 4)]
@@ -31,12 +32,18 @@ def animate(i):
     # Get the point from the points list at index i
     point1 = points1[i]
     point2 = points2[i]
+
+    # Plot goals
+    ax.plot(2,4,color = 'black', marker = 'o')
+    ax.plot(2,0,color = 'gray', marker = 'o')
+
     # Plot that point using the x and y coordinates
     ax.plot(point1[0], point1[1], color='black', label='original', marker='o',markersize=40)
-    ax.plot(point2[0], point2[1], color='green', label='original', marker='o',markersize=40)
+    ax.plot(point2[0], point2[1], color='gray', label='original', marker='o',markersize=40)
+
     # Set the x and y axis to display a fixed range
-    ax.set_xlim([0, 6])
-    ax.set_ylim([0, 6])
+    ax.set_xlim([-1, 5])
+    ax.set_ylim([-1, 5])
     ax.grid(True)
 
 # run animation
@@ -45,4 +52,4 @@ ani = FuncAnimation(fig, animate, frames=len(points2),
 plt.close()
 
 # Save the animation as an animated GIF
-ani.save("simple_animation.gif", dpi=300, writer=PillowWriter(fps=.5))
+ani.save("basic_animation_1.gif", dpi=300, writer=PillowWriter(fps=.8))

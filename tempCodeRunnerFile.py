@@ -1,4 +1,2 @@
-from matplotlib.animation import PillowWriter
-# # Save the animation as an animated GIF
-# ani.save("simple_animation.gif", dpi=300,
-#          writer=PillowWriter(fps=1))
+ax.xticks(np.arange(1, 5, 1.0))
+    # ax.yticks(np.arange(1, 5, 1.0))
