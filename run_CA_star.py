@@ -28,7 +28,8 @@ if __name__ == '__main__':
     # pseudocode for how this can be generalized with a robot class:
     # for robot in robots:
     #    robot.path = run_CA_star(robot.map, res_table, robot.robot_id)
-    # animate_paths(all_robots, "video_1")
+    #    all_robots_paths.append(robot.path)
+    # animate_paths(all_robots_paths, "video_1")
 
     # create reservation table
     res_table = reservation_table()
@@ -42,10 +43,3 @@ if __name__ == '__main__':
 
     # save video of the paths
     animate_paths(r1_path, r2_path, "video_1")
-
-    # NOTE 
-    # CA* appears to be working. 
-    # Now need to combine with entire script
-    # and make sure heuristic is good
-    # and generalize code for multiple robots and different maps
-    # and display obstacles, starts, and goals
