@@ -3,34 +3,30 @@ from matplotlib.animation import FuncAnimation
 from matplotlib.animation import PillowWriter
 import numpy as np
 
-def animate_paths(path1,path2, file_name, show_goals = False):
-    # function that plots two paths over time and saves it as a gif
-    # will extend to multiple paths later
-
-    points1 = []
-    points2 = []
+def animate_paths(all_paths, all_ends, obstacles, file_name, show_goals = False):
+    ''' 
+    function that plots paths over time and saves it as a gif
+    '''
 
     # find max path length
-    x = [len(path1),len(path2)]
-    l_max = max(x)
+    max_len = 0
+    for path in all_paths:
+        if len(path) > max_len:
+            max_len = len(path)
 
-    # if length isn't equal to path length
-    # take last element in path and append to array until it is
-    # (need this because one path will be shorter)
-    while len(path1) != l_max:
-        path1.append(path1[-1])
-    
-    while len(path2) != l_max:
-        path2.append(path2[-1])
+    # need this because one path will be shorter
+    for path in all_paths:
+        while len(path) != max_len:
+            path.append(path[-1])
 
-
-    # take time out of paths
-    for tup in path1:
-        new_tup = (tup[0],tup[1])
-        points1.append(new_tup)
-    for tup in path2:
-        new_tup = (tup[0],tup[1])
-        points2.append(new_tup)
+    all_points = []
+    # take time out of paths so they are just lists of points to plot
+    for path in all_paths:
+        temp_points = []
+        for tup in path:
+            new_tup = (tup[0],tup[1])
+            temp_points.append(new_tup)
+        all_points.append(temp_points)
 
     fig, ax = plt.subplots(1, 1)
     fig.set_size_inches(5,5)
@@ -38,17 +34,23 @@ def animate_paths(path1,path2, file_name, show_goals = False):
     def animate(i):
         ax.clear()
         # Get the point from the points list at index i
-        point1 = points1[i]
-        point2 = points2[i]
+        current_points = []
+        for points in all_points:
+            current_points.append(points[i])
+
+        color_map = ['black', 'gray', 'tan', 'slategray']
+
+        # plot obstacles
+        for obstacle in obstacles:
+            ax.plot(obstacle[0],obstacle[1],color = 'black', marker = 'x', markersize = 20)
 
         if show_goals == True:
-            # Plot goals
-            ax.plot(2,4,color = 'black', marker = 'o')
-            ax.plot(2,0,color = 'gray', marker = 'o')
+            for j,coord in enumerate(all_ends):
+                ax.plot(coord[0],coord[1],color = color_map[j], marker = 'o')
 
         # Plot that point using the x and y coordinates
-        ax.plot(point1[0], point1[1], color='black', label='original', marker='o',markersize=40)
-        ax.plot(point2[0], point2[1], color='gray', label='original', marker='o',markersize=40)
+        for x, point in enumerate(current_points):
+            ax.plot(point[0], point[1], color=color_map[x], label='original', marker='o',markersize=40)
 
         # Set the x and y axis to display a fixed range
         ax.set_xlim([-1, 5])
@@ -56,11 +58,10 @@ def animate_paths(path1,path2, file_name, show_goals = False):
         ax.grid(True)
 
     # run animation
-    ani = FuncAnimation(fig, animate, frames=len(points2),
+    ani = FuncAnimation(fig, animate, frames=max_len,
                         interval=500, repeat=False)
     plt.close()
 
     # Save the animation as an animated GIF
-    ani.save(file_name + ".gif", dpi=300, writer=PillowWriter(fps=.8))
-
+    ani.save(file_name + ".gif", dpi=300, writer=PillowWriter(fps=.4))
     print(f"Saved video: {file_name}.gif")
