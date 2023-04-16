@@ -2,6 +2,7 @@
 
 from map_reader import MapReader
 from res_table import Reservation_table
+from visualization_multiple import *
 
 _buffer=10
 
@@ -23,3 +24,7 @@ class RobotServer(object):
             self.paths.append(path)
             print(path)
         # print(self.paths)
+        return self.paths
+    
+    def animatePath(self):
+        animate_paths(self.paths, self.mapReader.mapDim, self.mapReader.goalSet, "video_1")
