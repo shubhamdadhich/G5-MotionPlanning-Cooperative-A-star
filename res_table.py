@@ -5,14 +5,14 @@
 # key: (x,y,t)
 # value:0 (available) or 1 (reserved)
 
-class reservation_table(dict):
+class Reservation_table(dict):
   def __init__(self):
     self = dict()
   def add(self, key, value):
     self[key] = value
  
 # create reservation table
-res_table = reservation_table()
+res_table = Reservation_table()
 # example: agent 1 path (x position, y position, time)
 path = [(2,3,0),(3,4,1),(4,5,2)]
 

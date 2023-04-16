@@ -281,7 +281,7 @@ class PriorityQ:
 
 
 # edit
-def CA_star_search(init_state, f, is_goal, actions, h, res_table, robot_id):
+def CA_star_search(init_state, f, is_goal, actions, h, res_table, robot_id, costDict):
     '''
     init_state - value of the initial state
     f - transition function takes input state (s), action (a), returns s_prime = f(s, a)
@@ -295,9 +295,11 @@ def CA_star_search(init_state, f, is_goal, actions, h, res_table, robot_id):
     n0 = SearchNode(init_state, actions, cost = 0) 
     visited = []
     frontier.push(n0, n0.cost)
-    while len(frontier) > 0:  
+    while len(frontier) > 0:
+        
         # Expand lowest cost node
         n_i = frontier.pop()
+        
         # check if state has not been visited (by current robot)
         if n_i.state not in visited:
             visited.append(n_i.state)
@@ -313,7 +315,8 @@ def CA_star_search(init_state, f, is_goal, actions, h, res_table, robot_id):
                     n_prime = SearchNode(s_prime, actions, n_i, a)
                     # only add node and its cost if not in p-queue yet
                     # f = g + h
-                    n_prime.cost = costpath(n_prime) + h(n_prime.state)
+                    
+                    n_prime.cost = costpath(n_prime, actions, costDict) + h(n_prime.state)
 
                     # if n_prime isn't in the queue and has not been visited by previous robot
                     if frontier.get_cost(n_prime) is None and n_prime.state not in res_table:
@@ -359,15 +362,17 @@ def backpath(node):
     path.reverse()
     return (path, action_path)
 
-def costpath(node):
+def costpath(node, actions, costDict):
     '''
     Function to backtrack the cost of the node
     '''
     cost = 0
     # run until start node is hit
     while node.parent is not None:
-        if node.parent_action in ['u','d','l','r','p']:
-            cost = cost + 1
+        if node.parent_action in actions:
+            cost = cost + costDict[node.parent_action]
             node = node.parent
+        else:
+            raise Exception("Invalid action")
         
     return (cost)
