@@ -17,6 +17,7 @@ class MapReader(object):
         self.robotCount = None
         self.goalSet = None
         self.initMap = None
+        self.obstacleList = []
         self.readMapContents()
 
     def lookup(self, reg, data):
@@ -72,6 +73,7 @@ class MapReader(object):
                 for k in range(len(line)):
                     if line[k] == "x":
                         self.initMap[j-(i+1)][k] = DEFAULT_OBSTACLE_VALUE
+                        self.obstacleList.append((j-(i+1), k))
             return True
         else:
             return False

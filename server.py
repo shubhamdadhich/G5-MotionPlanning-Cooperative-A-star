@@ -27,4 +27,4 @@ class RobotServer(object):
         return self.paths
     
     def animatePath(self):
-        animate_paths(self.paths, self.mapReader.mapDim, self.mapReader.goalSet, "video_1")
+        animate_paths(self.paths, self.mapReader.mapDim, self.mapReader.goalSet, self.mapReader.obstacleList, "video_1", show_goals=True)

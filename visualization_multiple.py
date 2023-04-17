@@ -3,7 +3,7 @@ from matplotlib.animation import FuncAnimation
 from matplotlib.animation import PillowWriter
 import numpy as np
 
-def animate_paths(paths, mapDim, goalset, file_name, show_goals = False):
+def animate_paths(paths, mapDim, goalset, obstacleList, file_name, show_goals = False):
     # function that plots two paths over time and saves it as a gif
     # will extend to multiple paths later
 
@@ -56,7 +56,7 @@ def animate_paths(paths, mapDim, goalset, file_name, show_goals = False):
         ax.clear()
         # Get the point from the points list at index i
 
-        colorList = ['black', 'gray', 'red', 'green', 'blue', 'yellow', 'purple']
+        colorList = ['red', 'green', 'blue', 'purple', 'yellow', 'gray', 'black']
 
         apointList = []
         for points in pointList:
@@ -68,13 +68,22 @@ def animate_paths(paths, mapDim, goalset, file_name, show_goals = False):
 
         if show_goals == True:
             # Plot goals
-            ax.plot(2,4,color = 'black', marker = 'o')
-            ax.plot(2,0,color = 'gray', marker = 'o')
+
+            for ind, setPt in enumerate(goalset):
+                ax.plot(setPt[1][0], setPt[1][1], color=colorList[ind], marker='^')
+
+            # ax.plot(2,4,color = 'black', marker = 'o')
+            # ax.plot(2,0,color = 'gray', marker = 'o')
+
+        # Plot Obstacles
+
+        for point in obstacleList:
+            ax.plot(point[0], point[1], color='black', label='original', marker='s',markersize=20)
 
         # Plot that point using the x and y coordinates
 
-        for ind, points in enumerate(apointList):
-            ax.plot(points[0], points[1], color=colorList[ind], label='original', marker='o',markersize=40)
+        for ind, point in enumerate(apointList):
+            ax.plot(point[0], point[1], color=colorList[ind], label='original', marker='o',markersize=20)
 
         # ax.plot(point1[0], point1[1], color='black', label='original', marker='o',markersize=40)
         # ax.plot(point2[0], point2[1], color='gray', label='original', marker='o',markersize=40)
