@@ -11,6 +11,7 @@ from math import hypot, sqrt
 _DEBUG = False
 _DEBUG_END = True
 _ACTIONS = ['u','d','l','r','p']  # p for pause
+_ACTIONS2 = ['u','d','l','r','pgoal']  # pgoal is 0 cost. Allows for planning after goal is reached
 _T = 2
 _X = 1 
 _Y = 0
@@ -91,6 +92,7 @@ class GridMap:
         '''
         new_pos = list(s[:])
         # Ensure action stays on the board
+
         if a == 'u':
             # if not at top edge
             if s[_Y] > 0:
@@ -110,10 +112,10 @@ class GridMap:
                 new_pos[_T] += 1
         elif a == 'p':   # ADD Pause Action
             new_pos[_T] += 1
-
+        elif a == 'pgoal':   # ADD Pause Action
+            new_pos[_T] += 1
         else:
             print('Unknown action:', str(a))
-
         # Test if new position is clear
         if self.occupancy_grid[new_pos[0], new_pos[1]]:
             s_prime = tuple(s)
@@ -281,7 +283,7 @@ class PriorityQ:
 
 
 # edit
-def CA_star_search(init_state, f, is_goal, actions, h, res_table, robot_id):
+def CA_star_search(init_state, f, is_goal, actions, actions_goal_reached, h, res_table, robot_id, time_cap):
     '''
     init_state - value of the initial state
     f - transition function takes input state (s), action (a), returns s_prime = f(s, a)
@@ -301,18 +303,51 @@ def CA_star_search(init_state, f, is_goal, actions, h, res_table, robot_id):
         # check if state has not been visited (by current robot)
         if n_i.state not in visited:
             visited.append(n_i.state)
+            # if is_goal(n_i.state):
+            #     path, action_path = backpath(n_i)
+            #     # take up path at goal after reach (right now robots can pass through the other 
+            #     # robot when the other robot is at the goal) 
+            #     while len(path) < time_cap:
+            #         # make robot wait on goal
+            #         p_end = (path[-1][0],path[-1][1],path[-1][2]+1)
+            #         path.append(p_end)
+            #     # make robot path 'reserved' in space-time 
+            #     for state in path:
+            #         res_table.add(tuple(state), robot_id)
+                            
+            #     return (path, visited, res_table)
             if is_goal(n_i.state):
                 path, action_path = backpath(n_i)
-                # make robot 1 path 'reserved' in space-time 
-                for state in path:
-                    res_table.add(tuple(state), robot_id)
-                # NOTE take up path at goal after reach (right now robots can pass through the other 
-                # robot when the other robot is at the goal)   
-                # 
-                # 
-                # 
-                #                  
-                return (path, visited, res_table)
+                if len(path) < time_cap:
+                    for a in actions_goal_reached:
+                        s_prime = f(n_i.state, a)
+                        n_prime = SearchNode(s_prime, actions_goal_reached, n_i, a)
+                        # only add node and its cost if not in p-queue yet
+                        # f = g + h
+                        n_prime.cost = costpath(n_prime) + h(n_prime.state)
+
+                        # if n_prime isn't in the queue and has not been visited by previous robot
+                        if frontier.get_cost(n_prime) is None and n_prime.state not in res_table:
+
+                            # check for robots jumping over each other in x direction in space-time
+                            diagonal_top_x = tuple(np.subtract(n_prime.state,(0,0,1)))
+                            diagonal_bottom_x = tuple(np.subtract(n_prime.state,(1,0,0)))
+                            # check for robots jumping over each other in y direction in space-time
+                            diagonal_top_y = tuple(np.subtract(n_prime.state,(0,0,1)))
+                            diagonal_bottom_y = tuple(np.subtract(n_prime.state,(0,1,0)))
+
+                            # x direction check
+                            if diagonal_top_x and diagonal_bottom_x not in res_table:
+                                # y direction check
+                                if diagonal_top_y and diagonal_bottom_y not in res_table:
+                                    # consider new state
+                                    frontier.push(n_prime, n_prime.cost)
+                if len(path) >= time_cap:
+                    # make robot path 'reserved' in space-time 
+                    for state in path:
+                        res_table.add(tuple(state), robot_id)
+                    return (path, visited, res_table)
+
             else:
                 for a in actions:
                     s_prime = f(n_i.state, a)
@@ -371,9 +406,12 @@ def costpath(node):
     '''
     cost = 0
     # run until start node is hit
+    
     while node.parent is not None:
         if node.parent_action in ['u','d','l','r','p']:
             cost = cost + 1
             node = node.parent
-        
+        elif node.parent_action in ['pgoal']:
+            cost = cost + 0
+            node = node.parent
     return (cost)

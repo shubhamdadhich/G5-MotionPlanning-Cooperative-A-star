@@ -14,10 +14,10 @@ def animate_paths(all_paths, all_ends, obstacles, file_name, show_goals = False)
         if len(path) > max_len:
             max_len = len(path)
 
-    # need this because one path will be shorter
-    for path in all_paths:
-        while len(path) != max_len:
-            path.append(path[-1])
+    # # need this because one path will be shorter
+    # for path in all_paths:
+    #     while len(path) != max_len:
+    #         path.append(path[-1])
 
     all_points = []
     # take time out of paths so they are just lists of points to plot
@@ -38,7 +38,7 @@ def animate_paths(all_paths, all_ends, obstacles, file_name, show_goals = False)
         for points in all_points:
             current_points.append(points[i])
 
-        color_map = ['black', 'gray', 'tan', 'slategray']
+        color_map = ['black', 'gray', 'tan', 'steelblue']
 
         # plot obstacles
         for obstacle in obstacles:
@@ -63,5 +63,5 @@ def animate_paths(all_paths, all_ends, obstacles, file_name, show_goals = False)
     plt.close()
 
     # Save the animation as an animated GIF
-    ani.save(file_name + ".gif", dpi=300, writer=PillowWriter(fps=.4))
+    ani.save(file_name + ".gif", dpi=300, writer=PillowWriter(fps=.5))
     print(f"Saved video: {file_name}.gif")

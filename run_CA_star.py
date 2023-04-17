@@ -15,18 +15,18 @@ class reservation_table(dict):
     self[key] = value
 
 # run CA* for the first robot and then update reservation table
-def run_CA_star(map_path, res_table, robot_id, actions=CA_star._ACTIONS):
+def run_CA_star(map_path, res_table, robot_id, actions=CA_star._ACTIONS, actions_goal_reached=CA_star._ACTIONS2):
     g = CA_star.GridMap(map_path)
-    path, visited, res_table = CA_star.CA_star_search(g.init_pos, g.transition, g.is_goal, actions,g.manhattan_heuristic, res_table, robot_id)
+    time_cap = 8
+    path, visited, res_table = CA_star.CA_star_search(g.init_pos, g.transition, g.is_goal, actions,actions_goal_reached,g.manhattan_heuristic, res_table, robot_id, time_cap)
     # g.display_map(path,visited)
     return path
 
 # edit map
 if __name__ == '__main__':
     
-    # NOTE robots need to take up position up to a time step 't' once they reach the goal
-    # currently the robots don't take up the goal position once they reach it, so robots can
-    # pass through each other
+    # NOTE need to add replanning on the goal: video_4 shows why
+    # (gray robot goes first, blue robot needs to be able to move after reaching goal)
     
     # create reservation table
     res_table = reservation_table()
@@ -48,4 +48,6 @@ if __name__ == '__main__':
     all_obstacles = []
 
     # save video of the paths
-    animate_paths(all_paths, all_ends, all_obstacles,"video_4", True)
+    animate_paths(all_paths, all_ends, all_obstacles,"video_6", True)
+
+    print(res_table)
