@@ -63,5 +63,5 @@ def animate_paths(all_paths, all_ends, obstacles, file_name, show_goals = False)
     plt.close()
 
     # Save the animation as an animated GIF
-    ani.save(file_name + ".gif", dpi=300, writer=PillowWriter(fps=.5))
+    ani.save(file_name + ".gif", dpi=300, writer=PillowWriter(fps=1.5))
     print(f"Saved video: {file_name}.gif")

@@ -42,7 +42,6 @@ class GridMap:
         if map_path is not None:
             self.read_map(map_path)
 
-# edit
     def read_map(self, map_path):
         '''
         Read in a specified map file of the format described in the class doc string.
@@ -112,7 +111,7 @@ class GridMap:
                 new_pos[_T] += 1
         elif a == 'p':   # ADD Pause Action
             new_pos[_T] += 1
-        elif a == 'pgoal':   # ADD Pause Action
+        elif a == 'pgoal':   # ADD Pause Action on goal
             new_pos[_T] += 1
         else:
             print('Unknown action:', str(a))
@@ -123,7 +122,6 @@ class GridMap:
             s_prime = tuple(new_pos)
         return s_prime
 
-# edit
     def display_map(self, path=[], visited={}, filename=None):
         '''
         Visualize the map read in. Optionally display the resulting plan and visisted nodes
@@ -281,8 +279,6 @@ class PriorityQ:
         '''
         return str(self.l)
 
-
-# edit
 def CA_star_search(init_state, f, is_goal, actions, actions_goal_reached, h, res_table, robot_id, time_cap):
     '''
     init_state - value of the initial state
@@ -303,6 +299,7 @@ def CA_star_search(init_state, f, is_goal, actions, actions_goal_reached, h, res
         # check if state has not been visited (by current robot)
         if n_i.state not in visited:
             visited.append(n_i.state)
+            # Old Code:
             # if is_goal(n_i.state):
             #     path, action_path = backpath(n_i)
             #     # take up path at goal after reach (right now robots can pass through the other 
@@ -373,7 +370,7 @@ def CA_star_search(init_state, f, is_goal, actions, actions_goal_reached, h, res
                                 # consider new state
                                 frontier.push(n_prime, n_prime.cost)
 
-                    # NOTE may need to add this back in later, took out because causing errors
+                    # may need to add this back in later, took out because causing errors
                     #elif n_prime.cost < frontier.get_cost(n_prime):
                     #    frontier.push(n_prime, n_prime.cost)
     return None
@@ -411,7 +408,7 @@ def costpath(node):
         if node.parent_action in ['u','d','l','r','p']:
             cost = cost + 1
             node = node.parent
-        elif node.parent_action in ['pgoal']:
+        elif node.parent_action in ['pgoal']:   # cost = 0 for sitting at goal
             cost = cost + 0
             node = node.parent
     return (cost)
