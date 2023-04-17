@@ -46,11 +46,6 @@ def animate_paths(paths, mapDim, goalset, obstacleList, file_name, show_goals = 
 
     fig, ax = plt.subplots(1, 1)
     fig.set_size_inches(5,5)
-
-    apointList = []
-    for points in pointList:
-        apointList.append(points[1])
-    print(apointList)
     
     def animate(i):
         ax.clear()
@@ -61,7 +56,7 @@ def animate_paths(paths, mapDim, goalset, obstacleList, file_name, show_goals = 
         apointList = []
         for points in pointList:
             apointList.append(points[i])
-        print(apointList)
+        # print(apointList)
 
         # point1 = points1[i]
         # point2 = points2[i]
