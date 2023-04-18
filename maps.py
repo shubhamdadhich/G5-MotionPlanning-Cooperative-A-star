@@ -33,21 +33,21 @@ def show_map(mapFile):
             map_start = i + 1
         search = re.search("MAP_DIMENSIONS", line)
         if search:
-            (x,y) = tuple(int(num) for num in filter(None,re.split(r"[\b\W\b]", line[search.span()[1]+1:-1]))) # https://stackoverflow.com/a/30933281
-    map_array = np.zeros([y,x],dtype=int)
+            (x_dim,y_dim) = tuple(int(num) for num in filter(None,re.split(r"[\b\W\b]", line[search.span()[1]+1:-1]))) # https://stackoverflow.com/a/30933281
+    map_array = np.zeros([y_dim,x_dim],dtype=int)
     if map_start is not None:
-        for l in range((map_start),(map_start+y)):
+        for l in range((map_start),(map_start+y_dim)):
             line = data[l]
-            for c in range(x):
-                if (line[c] == "1"):
+            for x in range(x_dim):
+                if (line[x] == "1"):
                     val = 1
-                elif (line[c] == "i"):
+                elif (line[x] == "i"):
                     val = 2
-                elif (line[c] == "g"):
+                elif (line[x] == "g"):
                     val = 3
                 else:
                     val = 0
-                map_array[l - map_start][c] = val
+                map_array[l - map_start][x] = val
     plt.imshow(palette[map_array]) # https://stackoverflow.com/a/37720602
     return
 
