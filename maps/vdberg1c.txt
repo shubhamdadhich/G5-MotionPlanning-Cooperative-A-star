@@ -10,6 +10,6 @@ GOAL_SET:
 MAP:
 111111
 1ig0i1
-1i10gx
-1gi0gx
+1i10g1
+1gi0g1
 111111
