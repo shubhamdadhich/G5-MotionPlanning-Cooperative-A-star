@@ -9,10 +9,10 @@ map_list = ["vdberg1a.txt", # 5x5, 3 robots
         "vdberg3c.txt", # 32x22, 10 robots
         "gauntlet.txt"] # 32x21, 19 robots
 
-palette = np.array([[255, 255, 255],   # white
-                    [  0,   0,   0],   # black
-                    [  0, 255,   0],   # green
-                    [255,   0,   0],   # red
+palette = np.array([[255, 255, 255],   # white, empty
+                    [128, 128, 128],   # grey, blocked
+                    [  0, 255,   0],   # green, start
+                    [255,   0,   0],   # red, end
                     ])
 
 def get_map(map_num=None, DEBUG=False):
@@ -25,18 +25,18 @@ def get_map(map_num=None, DEBUG=False):
     return map_list[map_num]
 
 def show_map(mapFile):
-    found_map = None
+    map_start = None
     with open(map_root + mapFile) as f:
         data = f.readlines()
     for i, line in enumerate(data):
         if re.search("MAP", line):
-            found_map = i
+            map_start = i + 1
         search = re.search("MAP_DIMENSIONS", line)
         if search:
-            (x,y) = tuple(int(num) for num in filter(None,re.split(r"[\b\W\b]", line[search.span()[1]+1:-1])))
+            (x,y) = tuple(int(num) for num in filter(None,re.split(r"[\b\W\b]", line[search.span()[1]+1:-1]))) # https://stackoverflow.com/a/30933281
     map_array = np.zeros([y,x],dtype=int)
-    if found_map:
-        for l in range((found_map+1),(found_map+y+1)):
+    if map_start is not None:
+        for l in range((map_start),(map_start+y)):
             line = data[l]
             for c in range(x):
                 if (line[c] == "1"):
@@ -47,13 +47,11 @@ def show_map(mapFile):
                     val = 3
                 else:
                     val = 0
-                map_array[l - found_map-1][c] = val
-    plt.imshow(palette[map_array])
+                map_array[l - map_start][c] = val
+    plt.imshow(palette[map_array]) # https://stackoverflow.com/a/37720602
     return
 
 if __name__ == '__main__':
-    show_map(map_list[0])
-    show_map(map_list[1])
-    show_map(map_list[2])
-    show_map(map_list[3])
-    show_map(map_list[4])
+    for i in range(len(map_list)):
+        show_map(map_list[i])
+        plt.pause(3)
