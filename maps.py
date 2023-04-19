@@ -4,10 +4,11 @@ import re
 
 map_root = "maps/"
 map_list = ["vdberg1a.txt", # 5x5, 3 robots
-        "vdberg1b.txt", # 6x5, 3 robots
-        "vdberg1c.txt", # 6x5, 4 robots
-        "vdberg3c.txt", # 32x22, 10 robots
-        "gauntlet.txt"] # 32x21, 19 robots
+            "vdberg1b.txt", # 6x5, 3 robots
+            "vdberg1c.txt", # 6x5, 4 robots
+            "plus.txt",
+            "vdberg3c.txt", # 32x22, 10 robots
+            "gauntlet.txt"] # 32x21, 19 robots
 
 palette = np.array([[255, 255, 255],   # white, empty
                     [128, 128, 128],   # grey, blocked
