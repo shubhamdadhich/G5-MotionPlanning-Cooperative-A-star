@@ -7,6 +7,7 @@ map_list = ["vdberg1a.txt", # 5x5, 3 robots
             "vdberg1b.txt", # 6x5, 3 robots
             "vdberg1c.txt", # 6x5, 4 robots
             "plus.txt",     # 7x7, 2 robots
+            "choke.txt",    # 7x7, 2 robots
             "vdberg3c.txt", # 32x22, 10 robots
             "gauntlet.txt"] # 32x21, 19 robots
 
@@ -60,13 +61,15 @@ def show_map(mapFile):
                     val = 0
                 map_array[l - map_start][x] = val
     plt.close("all")
-    f = plt.figure(figsize=(8,8))
+    f = plt.figure(figsize=(0.3*x_dim+1,0.3*y_dim+1))
     ax = plt.imshow(palette[map_array], aspect="equal") # https://stackoverflow.com/a/37720602
-    plt.xlim([-1,35])
-    plt.ylim([-1,35])
+    plt.xlim([-1,x_dim])
+    plt.ylim([-1,y_dim])
     for i, coord in enumerate(robot_coords):
         plt.annotate(str(i), xy=(coord[0], coord[1]), va="center", ha="center")
         plt.annotate(str(i), xy=(coord[2], coord[3]), va="center", ha="center")
+    name = mapFile.split(".")[0] + ".png"
+    plt.savefig(fname=map_root + "images/" + name)
     return
 
 if __name__ == '__main__':
