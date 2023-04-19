@@ -8,8 +8,8 @@ GOAL_SET:
 [4, 1]: [1, 3]
 [2, 3]: [2, 1]
 MAP:
-111111
-1ig0i1
-1i10g1
-1gi0g1
-111111
+xxxxxx
+xig0ix
+xix0gx
+xgi0gx
+xxxxxx

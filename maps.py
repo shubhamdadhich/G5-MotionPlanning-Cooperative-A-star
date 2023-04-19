@@ -1,15 +1,18 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.ticker import MaxNLocator, MultipleLocator
 import re
 
 map_root = "maps/"
 map_list = ["vdberg1a.txt", # 5x5, 3 robots
             "vdberg1b.txt", # 6x5, 3 robots
             "vdberg1c.txt", # 6x5, 4 robots
+            "bug_map.txt",  # 5x5, 4 robots
             "plus.txt",     # 7x7, 2 robots
             "choke.txt",    # 7x7, 2 robots
             "testmap0.txt", # 10x10, 4 robots
             "vdberg3c.txt", # 32x22, 10 robots
+            "quad.txt",     # 32x22, 4 robots
             "gauntlet.txt"] # 32x21, 19 robots
 
 palette = np.array([[255, 255, 255],   # white, empty
@@ -57,7 +60,7 @@ def show_map(mapFile):
         for l in range((map_start),(map_start+y_dim)):
             line = data[l]
             for x in range(x_dim):
-                if (line[x] == "1"):
+                if (line[x] == "x"):
                     val = 1
                 elif (line[x] == "i"):
                     val = 2
@@ -70,9 +73,12 @@ def show_map(mapFile):
     ## plotting
     plt.close("all")
     plt.figure(figsize=(0.3*x_dim+1,0.3*y_dim+1))
-    plt.imshow(palette[map_array], aspect="equal") # https://stackoverflow.com/a/37720602
+    ax = plt.imshow(palette[map_array], aspect="equal").axes # https://stackoverflow.com/a/37720602, https://stackoverflow.com/a/8280500
     plt.xlim([-1,x_dim])
     plt.ylim([-1,y_dim])
+    ax.invert_yaxis() # https://stackoverflow.com/a/8280500
+    ax.xaxis.set_major_locator(MultipleLocator(base=5)) # https://stackoverflow.com/a/34880501
+    ax.yaxis.set_major_locator(MultipleLocator(base=5)) # https://stackoverflow.com/a/34880501
     for i, coord in enumerate(robot_coords):
         plt.annotate(str(i), xy=(coord[0], coord[1]), va="center", ha="center")
         plt.annotate(str(i), xy=(coord[2], coord[3]), va="center", ha="center")
