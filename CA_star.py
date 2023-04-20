@@ -281,7 +281,7 @@ class PriorityQ:
 
 
 # edit
-def CA_star_search(init_state, f, is_goal, actions, h, res_table, robot_id, costDict):
+def CA_star_search(init_state, f, is_goal, actions, actions_goal_reached, h, res_table, robot_id, diagonalf, time_cap, costDict):
     '''
     init_state - value of the initial state
     f - transition function takes input state (s), action (a), returns s_prime = f(s, a)
@@ -305,11 +305,31 @@ def CA_star_search(init_state, f, is_goal, actions, h, res_table, robot_id, cost
             visited.append(n_i.state)
             if is_goal(n_i.state):
                 path, action_path = backpath(n_i)
-                # make robot 1 path 'reserved' in space-time 
-                for state in path:
-                    res_table.add(tuple(state), robot_id)                    
-                return (path, visited, res_table)
+                if len(path) < time_cap:
+                    # import pdb;pdb.set_trace()
+                    for a in (actions[:-1] + actions_goal_reached):
+                        # print(a)
+                        s_prime = f(n_i.state, a)
+                        n_prime = SearchNode(s_prime, actions[:-1] + actions_goal_reached, n_i, a)
+                        # only add node and its cost if not in p-queue yet
+                        # f = g + h
+                        
+                        n_prime.cost = costpath(n_prime, actions, costDict, goalAction=actions_goal_reached) + h(n_prime.state)
+
+                        # if n_prime isn't in the queue and has not been visited by previous robot
+                        if frontier.get_cost(n_prime) is None and n_prime.state not in res_table:
+
+                            # check for robots jumping over each other in x direction in space-time
+                            diagonal_top, diagonal_bot = diagonalf(n_prime.state, a)
+                            if diagonal_top not in res_table and diagonal_bot not in res_table:
+                                frontier.push(n_prime, n_prime.cost)
+                if len(path) >= time_cap:
+                    # make robot path 'reserved' in space-time
+                    for state in path:
+                        res_table.add(tuple(state), robot_id)
+                    return (path, visited, res_table)
             else:
+
                 for a in actions:
                     s_prime = f(n_i.state, a)
                     n_prime = SearchNode(s_prime, actions, n_i, a)
@@ -320,19 +340,12 @@ def CA_star_search(init_state, f, is_goal, actions, h, res_table, robot_id, cost
 
                     # if n_prime isn't in the queue and has not been visited by previous robot
                     if frontier.get_cost(n_prime) is None and n_prime.state not in res_table:
-
                         # check for robots jumping over each other in x direction in space-time
-                        diagonal_top_x = tuple(np.subtract(n_prime.state,(0,0,1)))
-                        diagonal_bottom_x = tuple(np.subtract(n_prime.state,(1,0,0)))
-                        # check for robots jumping over each other in y direction in space-time
-                        diagonal_top_y = tuple(np.subtract(n_prime.state,(0,0,1)))
-                        diagonal_bottom_y = tuple(np.subtract(n_prime.state,(0,1,0)))
-
-                        # x direction check
-                        if diagonal_top_x and diagonal_bottom_x not in res_table:
-                            # y direction check
-                            if diagonal_top_y and diagonal_bottom_y not in res_table:
-                                # consider new state
+                        # if n_i.state[:-1] == (7, 5) and a == 'r':
+                        #     import pdb;pdb.set_trace()
+                        diagonal_top, diagonal_bot = diagonalf(n_prime.state, a)
+                        if diagonal_top and diagonal_bot:
+                            if diagonal_top not in res_table and diagonal_bot not in res_table:
                                 frontier.push(n_prime, n_prime.cost)
 
                     # NOTE may need to add this back in later, took out because causing errors
@@ -362,7 +375,7 @@ def backpath(node):
     path.reverse()
     return (path, action_path)
 
-def costpath(node, actions, costDict):
+def costpath(node, actions, costDict, goalAction=None):
     '''
     Function to backtrack the cost of the node
     '''
@@ -370,6 +383,9 @@ def costpath(node, actions, costDict):
     # run until start node is hit
     while node.parent is not None:
         if node.parent_action in actions:
+            cost = cost + costDict[node.parent_action]
+            node = node.parent
+        elif goalAction and node.parent_action in goalAction:
             cost = cost + costDict[node.parent_action]
             node = node.parent
         else:

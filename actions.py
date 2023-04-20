@@ -1,4 +1,5 @@
 # actions class will be implemented here
+import numpy as np
 
 
 class ActionSet(object):
@@ -16,12 +17,15 @@ class CooperativeFourDirection(ActionSet):
     def __init__(self) -> None:
         super().__init__()
         self.actions = ['r', 'l', 'u', 'd', 'wait']
+        self.goalReachedAction = ['pgoal']
         self.actionsDict = {'r': [0, 1, 1],
                         'l': [0, -1, 1],
                         'u': [-1, 0, 1],
                         'd': [+1, 0, 1],
                         'wait': [0, 0, 0.25]}
-        self.costDict = {'r':1, 'l':1, 'u':1, 'd':1, 'wait': 0.25}
+        self.costDict = {'r':1, 'l':1, 'u':1, 'd':1, 'wait': 0.25, 'pgoal': 0}
+        self.xdirs = ['r', 'l']
+        self.ydirs = ['u', 'd']
 
     def isgoal(self, s, goal):
         # if(s[:-1]==(5,5)):
@@ -60,8 +64,28 @@ class CooperativeFourDirection(ActionSet):
                 new_pos[self._T] += 1
         elif a == 'wait':   # ADD Pause Action
             new_pos[self._T] += 1
+        elif a == 'pgoal':   # ADD Pause Action
+            new_pos[self._T] += 1
 
         else:
             print('Unknown action:', str(a))
 
         return new_pos
+    
+    
+    def checkDiagonal(self, s, a):
+        if a in self.xdirs:
+            diagonal_top_x = tuple(np.subtract(s,(0,0,1)))
+            if a == 'r':
+                diagonal_bottom_x = tuple(np.add(s,(1,0,0)))
+            elif a == 'l':
+                diagonal_bottom_x = tuple(np.subtract(s,(1,0,0)))
+            return diagonal_top_x, diagonal_bottom_x
+        elif a in self.ydirs:
+            diagonal_top_y = tuple(np.subtract(s,(0,0,1)))
+            if a == 'u':
+                diagonal_bottom_y = tuple(np.add(s,(0,1,0)))
+            elif a == 'd':
+                diagonal_bottom_y = tuple(np.subtract(s,(0,1,0)))
+            return diagonal_top_y, diagonal_bottom_y
+        return None, None

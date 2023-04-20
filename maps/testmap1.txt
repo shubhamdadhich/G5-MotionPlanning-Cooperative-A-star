@@ -1,0 +1,15 @@
+ROBOT_TYPE: FourDirectionHolonomic
+DOF: 2
+MAP_DIMENSIONS: [5, 5]
+ROBOT_COUNT: 4
+GOAL_SET:
+[2, 4]: [4, 0]  
+[2, 1]: [4, 4]  
+[4, 2]: [2, 3]  
+[4, 3]: [3, 4]
+MAP:
+00000
+00000
+0i0gi
+0000g
+g0iig

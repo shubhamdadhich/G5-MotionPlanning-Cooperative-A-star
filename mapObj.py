@@ -1,6 +1,7 @@
 # Here the map will be stored
 
 from math import hypot, sqrt
+import map_reader
 
 class MapObj2D(object):
 
@@ -25,11 +26,14 @@ class MapObj2D(object):
     def transition(self, s, a):
         # Test if new position is clear
         new_pos = self.actionSet.move(s, a, self.mapDim[0], self.mapDim[1])
-        if self.initMap[new_pos[0], new_pos[1]]:
+        if self.initMap[new_pos[0], new_pos[1]] == map_reader.DEFAULT_OBSTACLE_VALUE:
             s_prime = tuple(s)
         else:
             s_prime = tuple(new_pos)
         return s_prime
+    
+    def check_diagonal(self, s, a):
+        return self.actionSet.checkDiagonal(s, a)
     
     def uninformed_heuristic(self, s):
         '''

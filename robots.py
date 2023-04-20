@@ -24,7 +24,8 @@ class FourDirectionHolonomic(Robot):
     
     def getPath(self, mapDim, camap, res_table, start, goal):
         self.mapObj = MapObj2D(mapDim, camap, start, goal, __class__.actionSet)
-        self.path, self.visited, res_table = CA_star_search(self.mapObj.initPos, self.mapObj.transition, self.mapObj.is_goal, self.actionSet.actions, self.mapObj.manhattan_heuristic, res_table, self.id, self.actionSet.costDict)
+        self.path, self.visited, res_table = CA_star_search(self.mapObj.initPos, self.mapObj.transition, self.mapObj.is_goal, self.mapObj.actionSet.actions, self.mapObj.actionSet.goalReachedAction,
+                                                            self.mapObj.manhattan_heuristic, res_table, self.id, self.mapObj.check_diagonal, 20, self.actionSet.costDict)
         return self.path, self.visited, res_table
 
 
