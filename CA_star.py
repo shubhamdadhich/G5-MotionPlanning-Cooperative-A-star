@@ -219,6 +219,7 @@ def costpath(node, actions, costDict, goalAction=None):
             cost = cost + costDict[node.parent_action]
             node = node.parent
         else:
+            import pdb;pdb.set_trace()
             raise Exception("Invalid action")
         
     return (cost)
