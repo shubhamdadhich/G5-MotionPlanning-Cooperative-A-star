@@ -67,7 +67,8 @@ class MapReader(object):
                 break
         if mapFound:
             self.initMap = np.zeros(self.mapDim, dtype=np.int32)
-            for j in range(i+1, i + self.mapDim[1] +1):
+            for j in range(i+1, i + self.mapDim[0] +1):
+                print(i, j)
                 line = data[j].strip()
                 # print(line, j)
                 for k in range(len(line)):

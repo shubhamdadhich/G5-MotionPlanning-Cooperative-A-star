@@ -51,7 +51,7 @@ def animate_paths(paths, mapDim, goalset, obstacleList, file_name, show_goals = 
         ax.clear()
         # Get the point from the points list at index i
 
-        colorList = ['red', 'green', 'blue', 'purple', 'yellow', 'gray', 'black']
+        colorList = ['red', 'green', 'blue', 'purple', 'yellow', 'gray', 'black', 'cyan', 'magenta', 'brown', 'pink', 'orange', 'olive']
 
         apointList = []
         for points in pointList:
@@ -73,12 +73,12 @@ def animate_paths(paths, mapDim, goalset, obstacleList, file_name, show_goals = 
         # Plot Obstacles
 
         for point in obstacleList:
-            ax.plot(point[1], point[0], color='black', label='original', marker='s',markersize=20)
+            ax.plot(point[1], point[0], color='black', label='original', marker='s',markersize=5)
 
         # Plot that point using the x and y coordinates
 
         for ind, point in enumerate(apointList):
-            ax.plot(point[1], point[0], color=colorList[ind], label='original', marker='o',markersize=20)
+            ax.plot(point[1], point[0], color=colorList[ind], label='original', marker='o',markersize=5)
 
         # ax.plot(point1[0], point1[1], color='black', label='original', marker='o',markersize=40)
         # ax.plot(point2[0], point2[1], color='gray', label='original', marker='o',markersize=40)

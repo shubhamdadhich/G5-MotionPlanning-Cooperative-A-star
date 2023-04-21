@@ -77,9 +77,9 @@ class CooperativeFourDirection(ActionSet):
         if a in self.xdirs:
             diagonal_top_x = tuple(np.subtract(s,(0,0,1)))
             if a == 'r':
-                diagonal_bottom_x = tuple(np.add(s,(1,0,0)))
-            elif a == 'l':
                 diagonal_bottom_x = tuple(np.subtract(s,(1,0,0)))
+            elif a == 'l':
+                diagonal_bottom_x = tuple(np.add(s,(1,0,0)))
             return diagonal_top_x, diagonal_bottom_x
         elif a in self.ydirs:
             diagonal_top_y = tuple(np.subtract(s,(0,0,1)))
