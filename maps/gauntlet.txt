@@ -2,7 +2,7 @@ ROBOT_TYPE: FourDirectionHolonomic
 DOF: 2
 MAP_DIMENSIONS: [21, 32]
 ROBOT_COUNT: 19
-GOAL_SET
+GOAL_SET:
 [ 1, 1 ]: [ 1, 30]
 [ 2, 1 ]: [ 1, 30]
 [ 3, 1 ]: [ 1, 30]
@@ -22,7 +22,7 @@ GOAL_SET
 [ 17, 1 ]: [ 1, 30]
 [ 18, 1 ]: [ 1, 30]
 [ 19, 1 ]: [ 1, 30]
-MAP
+MAP:
 xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 xi0000000000000x00000000000000gx
 xi0000000000000x00000000000000gx

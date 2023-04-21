@@ -65,7 +65,7 @@ def animate_paths(paths, mapDim, goalset, obstacleList, file_name, show_goals = 
             # Plot goals
 
             for ind, setPt in enumerate(goalset):
-                ax.plot(setPt[1][1], setPt[1][0], color=colorList[ind], marker='^')
+                ax.plot(setPt[1][1], setPt[1][0], color=colorList[ind], marker='x', markersize=8)
 
             # ax.plot(2,4,color = 'black', marker = 'o')
             # ax.plot(2,0,color = 'gray', marker = 'o')
@@ -78,7 +78,7 @@ def animate_paths(paths, mapDim, goalset, obstacleList, file_name, show_goals = 
         # Plot that point using the x and y coordinates
 
         for ind, point in enumerate(apointList):
-            ax.plot(point[1], point[0], color=colorList[ind], label='original', marker='o',markersize=5)
+            ax.plot(point[1], point[0], color=colorList[ind], label='original', marker='o',markersize=7)
 
         # ax.plot(point1[0], point1[1], color='black', label='original', marker='o',markersize=40)
         # ax.plot(point2[0], point2[1], color='gray', label='original', marker='o',markersize=40)
@@ -94,6 +94,6 @@ def animate_paths(paths, mapDim, goalset, obstacleList, file_name, show_goals = 
     plt.close()
 
     # Save the animation as an animated GIF
-    ani.save(file_name + ".gif", dpi=300, writer=PillowWriter(fps=.8))
+    ani.save(file_name + ".gif", dpi=300, writer=PillowWriter(fps=1.2))
 
     print(f"Saved video: {file_name}.gif")
