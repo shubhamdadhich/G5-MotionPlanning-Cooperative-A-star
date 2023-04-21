@@ -5,18 +5,18 @@ from server import RobotServer
 
 map_root = "maps/"
 map_list = [
-            #"testmap1.txt", # 5x5, 4 robots
-            #"bug_map.txt",  # 5x5, 4 robots
+            "testmap1.txt", # 5x5, 4 robots
+            "bug_map.txt",  # 5x5, 4 robots
             #"vdberg1a.txt", # 5x5, 3 robots
             #"vdberg1b.txt", # 6x5, 3 robots
             #"vdberg1c.txt", # 6x5, 4 robots
-            #"plus.txt",     # 7x7, 2 robots
+            "plus.txt",     # 7x7, 2 robots
             #"choke.txt",    # 7x7, 2 robots
-            #"testmap0.txt", # 10x10, 4 robots
-            #"testmap2.txt", # 10x10, 4 robots
+            "testmap0.txt", # 10x10, 4 robots
+            "testmap2.txt", # 10x10, 4 robots
             "vdberg3c.txt", # 32x22, 10 robots
-            #"quad.txt",     # 32x22, 4 robots
-            #"gauntlet.txt" # 32x21, 19 robots
+            "quad.txt",     # 32x22, 4 robots
+            "gauntlet.txt" # 32x21, 19 robots
 ]
 
 if __name__ == "__main__":

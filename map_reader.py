@@ -113,8 +113,8 @@ class MapReader(object):
         self.getGoals(data)
         print("Goal Set: {}".format(self.goalSet))
 
-        self.getMap(data)
-        self.printMap(self.initMap)
+        if self.getMap(data):
+            self.printMap(self.initMap)
 
 if __name__ == "__main__":
     m = MapReader('maps/testmap0.txt')
