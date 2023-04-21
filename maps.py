@@ -16,7 +16,8 @@ map_list = [
             "testmap2.txt", # 10x10, 4 robots
             "vdberg3c.txt", # 32x22, 10 robots
             "quad.txt",     # 32x22, 4 robots
-            "gauntlet.txt"] # 32x21, 19 robots
+            "gauntlet.txt" # 32x21, 19 robots
+]
 
 palette = np.array([[255, 255, 255],   # white, empty
                     [128, 128, 128],   # grey, blocked
@@ -46,7 +47,7 @@ def show_map(mapFile):
 
         search = re.search("MAP_DIMENSIONS", line)
         if search:
-            (x_dim, y_dim) = tuple(int(num) for num in re.findall(r"\d+", line)) # https://stackoverflow.com/a/30933281
+            (y_dim, x_dim) = tuple(int(num) for num in re.findall(r"\d+", line)) # https://stackoverflow.com/a/30933281
 
         search = re.search("ROBOT_COUNT", line)
         if search:
@@ -76,15 +77,15 @@ def show_map(mapFile):
     ## plotting
     plt.close("all")
     plt.figure(figsize=(0.3*x_dim+1,0.3*y_dim+1))
-    ax = plt.imshow(palette[map_array], aspect="equal").axes # https://stackoverflow.com/a/37720602, https://stackoverflow.com/a/8280500
+    ax = plt.imshow(palette[map_array.T], aspect="equal").axes # https://stackoverflow.com/a/37720602, https://stackoverflow.com/a/8280500
     plt.xlim([-1, x_dim])
     plt.ylim([-1, y_dim])
-    ax.invert_yaxis() # https://stackoverflow.com/a/8280500
+    #ax.invert_yaxis() # https://stackoverflow.com/a/8280500
     ax.xaxis.set_major_locator(MultipleLocator(base=5)) # https://stackoverflow.com/a/34880501
     ax.yaxis.set_major_locator(MultipleLocator(base=5)) # https://stackoverflow.com/a/34880501
     for i, coord in enumerate(robot_coords):
-        plt.annotate(str(i), xy=(coord[0], coord[1]), va="center", ha="center")
-        plt.annotate(str(i), xy=(coord[2], coord[3]), va="center", ha="center")
+        plt.annotate(str(i), xy=(coord[1], coord[0]), va="center", ha="center")
+        plt.annotate(str(i), xy=(coord[3], coord[2]), va="center", ha="center")
     name = mapFile.split(".")[0] + ".png"
     plt.savefig(fname=map_root + "images/" + name, dpi=300)
     return
