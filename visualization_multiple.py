@@ -3,6 +3,12 @@ from matplotlib.animation import FuncAnimation
 from matplotlib.animation import PillowWriter
 import numpy as np
 
+palette = np.array([[255, 255, 255],   # white, empty
+                    [128, 128, 128],   # grey, blocked
+                    [  0, 255,   0],   # green, start
+                    [255,   0,   0],   # red, end
+                    ])
+
 def animate_paths(paths, mapDim, goalset, obstacleList, file_name, show_goals = False):
     # function that plots two paths over time and saves it as a gif
     # will extend to multiple paths later
@@ -61,19 +67,20 @@ def animate_paths(paths, mapDim, goalset, obstacleList, file_name, show_goals = 
         # point1 = points1[i]
         # point2 = points2[i]
 
+        # Plot Obstacles
+        map_array = np.zeros([mapDim[0],mapDim[1]],dtype=int)
+        for point in obstacleList:
+            map_array[point[0],point[1]] = 1
+            #ax.plot(point[1], point[0], color='black', label='original', marker='s',markersize=5)
+        ax.imshow(palette[map_array])
+
         if show_goals == True:
             # Plot goals
 
             for ind, setPt in enumerate(goalset):
                 ax.plot(setPt[1][1], setPt[1][0], color=colorList[ind], marker='x', markersize=8)
-
             # ax.plot(2,4,color = 'black', marker = 'o')
             # ax.plot(2,0,color = 'gray', marker = 'o')
-
-        # Plot Obstacles
-
-        for point in obstacleList:
-            ax.plot(point[1], point[0], color='black', label='original', marker='s',markersize=5)
 
         # Plot that point using the x and y coordinates
 
