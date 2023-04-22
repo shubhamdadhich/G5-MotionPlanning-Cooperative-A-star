@@ -111,7 +111,7 @@ class PriorityQ:
 
 
 # edit
-def CA_star_search(init_state, f, is_goal, actions, actions_goal_reached, h, res_table, robot_id, diagonalf, time_cap, costDict):
+def CA_star_search(init_state, f, is_goal, actions, actions_goal_reached, h, res_table, robot_id, diagonalf, costDict,time_cap):
     '''
     init_state - value of the initial state
     f - transition function takes input state (s), action (a), returns s_prime = f(s, a)
@@ -129,55 +129,147 @@ def CA_star_search(init_state, f, is_goal, actions, actions_goal_reached, h, res
         
         # Expand lowest cost node
         n_i = frontier.pop()
-        
+        #print(n_i.cost,'kikiki')
+        #if n_i.state!=n0.state:
+         #print(jhgfghjk)
         # check if state has not been visited (by current robot)
         if n_i.state not in visited:
             visited.append(n_i.state)
             if is_goal(n_i.state):
                 path, action_path = backpath(n_i)
+                #[]
+                #here
+                # x = tuple(np.add(n_i.state,(0,0,1)))
+                # if x in res_table:
+                #     front = PriorityQ() # priority queue
+                #     n0 = SearchNode(n_i.state, actions, cost = 0) 
+                #     visited = []
+                #     frontier.push(n0, n0.cost)
+                #     while len(frontier) > 0:
+                #         n_i = frontier.pop()
+                #         if n_i.state not in visited:
+                #             visited.append(n_i.state)
+                # else:
+                #     path.append(x)
+                    
+
                 if len(path) < time_cap:
                     # import pdb;pdb.set_trace()
+                    naction=[]
                     for a in (actions[:-1] + actions_goal_reached):
-                        # print(a)
+                        if a == 'r':
+                            x = tuple(np.add(n_i.state,(0,0,1)))
+                            xn=tuple(np.add(n_i.state,(0,1,0)))
+                            if xn not in res_table:
+                                naction.append(a)
+                        if a == 'l':
+                            x = tuple(np.add(n_i.state,(0,0,1)))
+                            xn=tuple(np.subtract(n_i.state,(0,1,0)))
+                            if xn not in res_table:
+                                naction.append(a)
+                        if a == 'u':
+                            x = tuple(np.add(n_i.state,(0,0,1)))
+                            xn=tuple(np.add(n_i.state,(1,0,0)))
+                            if xn not in res_table:
+                                naction.append(a)
+                        if a == 'd':
+                            x = tuple(np.add(n_i.state,(0,0,1)))
+                            xn=tuple(np.subtract(n_i.state,(1,0,0)))
+                            if xn not in res_table:
+                                naction.append(a)
+                        if a == 'pgoal':
+                            x = tuple(np.add(n_i.state,(0,0,1)))
+                            if x not in res_table:
+                                naction=[a]
+
+                    for a in naction:
+                        #print(n_i.cost,'from')
+                        #print(a,"act")
                         s_prime = f(n_i.state, a)
                         n_prime = SearchNode(s_prime, actions[:-1] + actions_goal_reached, n_i, a)
                         # only add node and its cost if not in p-queue yet
                         # f = g + h
                         
                         n_prime.cost = costpath(n_prime, actions, costDict, goalAction=actions_goal_reached) + h(n_prime.state)
-
+                        #print(n_prime.cost, "lojo")
+                        
                         # if n_prime isn't in the queue and has not been visited by previous robot
                         if frontier.get_cost(n_prime) is None and n_prime.state not in res_table:
 
                             # check for robots jumping over each other in x direction in space-time
                             diagonal_top, diagonal_bot = diagonalf(n_prime.state, a)
                             if diagonal_top not in res_table and diagonal_bot not in res_table:
-                                frontier.push(n_prime, n_prime.cost)
+                                if frontier.get_cost(n_prime)==None:
+                                    frontier.push(n_prime, n_prime.cost)
+                                if n_prime.cost < frontier.get_cost(n_prime):
+                                    frontier.push(n_prime, n_prime.cost)
+                            if a=='pgoal':
+                                if frontier.get_cost(n_prime)==None:
+                                        frontier.push(n_prime, n_prime.cost)
+                                if n_prime.cost < frontier.get_cost(n_prime):
+                                        frontier.push(n_prime, n_prime.cost)
                 if len(path) >= time_cap:
                     # make robot path 'reserved' in space-time
                     for state in path:
                         res_table.add(tuple(state), robot_id)
                     return (path, visited, res_table)
             else:
-
+                naction=[]
                 for a in actions:
+                    if a == 'r':
+                      x = tuple(np.add(n_i.state,(0,0,1)))
+                      xn=tuple(np.add(n_i.state,(0,1,0)))
+                      if xn not in res_table:
+                          naction.append(a)
+                    if a == 'l':
+                      x = tuple(np.add(n_i.state,(0,0,1)))
+                      xn=tuple(np.subtract(n_i.state,(0,1,0)))
+                      if xn not in res_table:
+                          naction.append(a)
+                    if a == 'u':
+                      x = tuple(np.add(n_i.state,(0,0,1)))
+                      xn=tuple(np.add(n_i.state,(1,0,0)))
+                      if xn not in res_table:
+                          naction.append(a)
+                    if a == 'd':
+                      x = tuple(np.add(n_i.state,(0,0,1)))
+                      xn=tuple(np.subtract(n_i.state,(1,0,0)))
+                      if xn not in res_table:
+                          naction.append(a)
+                    if a == 'wait':
+                      x = tuple(np.add(n_i.state,(0,0,1)))
+                      if x not in res_table:
+                          naction.append(a)
+
+                for a in naction:
                     s_prime = f(n_i.state, a)
-                    n_prime = SearchNode(s_prime, actions, n_i, a)
+                    n_prime = SearchNode(s_prime, naction, n_i, a)
                     # only add node and its cost if not in p-queue yet
-                    # f = g + h
+                    #print(n_i.cost)
+                    #print(a,"lojkl")
                     
                     n_prime.cost = costpath(n_prime, actions, costDict) + h(n_prime.state)
-
+                    #print(n_prime.cost, "lojo")
                     # if n_prime isn't in the queue and has not been visited by previous robot
                     if frontier.get_cost(n_prime) is None and n_prime.state not in res_table:
+                        #print(frontier.get_cost(n_prime),n_prime.state)
                         # check for robots jumping over each other in x direction in space-time
                         # if n_i.state[:-1] == (7, 5) and a == 'r':
                         #     import pdb;pdb.set_trace()
                         diagonal_top, diagonal_bot = diagonalf(n_prime.state, a)
                         if diagonal_top and diagonal_bot:
                             if diagonal_top not in res_table and diagonal_bot not in res_table:
-                                frontier.push(n_prime, n_prime.cost)
+                                if frontier.get_cost(n_prime)==None:
+                                    frontier.push(n_prime, n_prime.cost)
+                                if n_prime.cost < frontier.get_cost(n_prime):
+                                    frontier.push(n_prime, n_prime.cost)
+                        if a=='wait':
+                            if frontier.get_cost(n_prime)==None:
+                                    frontier.push(n_prime, n_prime.cost)
+                            if n_prime.cost < frontier.get_cost(n_prime):
+                                    frontier.push(n_prime, n_prime.cost)
 
+                #print(oiujhgb)
                     # NOTE may need to add this back in later, took out because causing errors
                     #elif n_prime.cost < frontier.get_cost(n_prime):
                     #    frontier.push(n_prime, n_prime.cost)
@@ -219,7 +311,7 @@ def costpath(node, actions, costDict, goalAction=None):
             cost = cost + costDict[node.parent_action]
             node = node.parent
         else:
-            import pdb;pdb.set_trace()
+            #import pdb;pdb.set_trace()
             raise Exception("Invalid action")
         
     return (cost)
