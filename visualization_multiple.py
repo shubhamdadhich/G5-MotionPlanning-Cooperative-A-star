@@ -57,7 +57,7 @@ def animate_paths(paths, mapDim, goalset, obstacleList, file_name, show_goals = 
         ax.clear()
         # Get the point from the points list at index i
 
-        colorList = ['red', 'green', 'blue', 'purple', 'yellow', 'gray', 'black', 'cyan', 'magenta', 'brown', 'pink', 'orange', 'olive']
+        colorList = ['red', 'green', 'blue', 'purple', 'yellow', 'gray', 'black', 'cyan', 'magenta', 'brown', 'pink', 'orange', 'olive','red', 'green', 'blue', 'purple', 'yellow', 'gray']
 
         apointList = []
         for points in pointList:
