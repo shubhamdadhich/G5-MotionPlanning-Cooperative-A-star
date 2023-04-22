@@ -18,12 +18,12 @@ class CooperativeFourDirection(ActionSet):
         super().__init__()
         self.actions = ['r', 'l', 'u', 'd', 'wait']
         self.goalReachedAction = ['pgoal']
-        self.actionsDict = {'r': [0, 1, 1],
+        self.actionsDict = {'r': [0, +1, 1],
                         'l': [0, -1, 1],
                         'u': [-1, 0, 1],
                         'd': [+1, 0, 1],
-                        'wait': [0, 0, 0.25]}
-        self.costDict = {'r':1, 'l':1, 'u':1, 'd':1, 'wait': 0.25, 'pgoal': 0}
+                        'wait': [0, 0, 1]}
+        self.costDict = {'r':1, 'l':1, 'u':1, 'd':1, 'wait': 0.5, 'pgoal': 0}
         self.xdirs = ['r', 'l']
         self.ydirs = ['u', 'd']
 
@@ -75,17 +75,24 @@ class CooperativeFourDirection(ActionSet):
     
     def checkDiagonal(self, s, a):
         if a in self.xdirs:
+            #under=tuple(np.add(s,(0,0,1)))
             diagonal_top_x = tuple(np.subtract(s,(0,0,1)))
             if a == 'r':
-                diagonal_bottom_x = tuple(np.add(s,(1,0,0)))
+                diagonal_bottom_x = tuple(np.subtract(s,(0,1,0)))
+                #print(s,diagonal_bottom_x)
             elif a == 'l':
-                diagonal_bottom_x = tuple(np.subtract(s,(1,0,0)))
-            return diagonal_top_x, diagonal_bottom_x
+                diagonal_bottom_x = tuple(np.add(s,(0,1,0)))
+            #print(a,s,diagonal_top_x,diagonal_bottom_x,"lololokjk")
+            #print(fsijgdnb)
+            return diagonal_top_x, diagonal_bottom_x#,under
         elif a in self.ydirs:
+            #under=tuple(np.add(s,(0,0,1)))
             diagonal_top_y = tuple(np.subtract(s,(0,0,1)))
             if a == 'u':
-                diagonal_bottom_y = tuple(np.add(s,(0,1,0)))
+                diagonal_bottom_y = tuple(np.add(s,(1,0,0)))
             elif a == 'd':
-                diagonal_bottom_y = tuple(np.subtract(s,(0,1,0)))
-            return diagonal_top_y, diagonal_bottom_y
-        return None, None
+                diagonal_bottom_y = tuple(np.subtract(s,(1,0,0)))
+            #print(s,diagonal_top_y,diagonal_bottom_y,"olololol")
+            #print(oasdijfhbn)
+            return diagonal_top_y, diagonal_bottom_y#,under
+        return False, False
